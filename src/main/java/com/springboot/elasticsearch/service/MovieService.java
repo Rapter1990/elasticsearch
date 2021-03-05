@@ -77,7 +77,7 @@ public class MovieService {
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(matchQuery(Constants.MOVIE_NAME, search)
                         .operator(Operator.AND)
-                        .fuzziness(Fuzziness.AUTO)
+                        .fuzziness(Fuzziness.AUTO) // change any uppercase or lowercase letter
                         .prefixLength(3)) // not changed in first 3 letters of search text
                 .build();
         return movieRepository.search(searchQuery);

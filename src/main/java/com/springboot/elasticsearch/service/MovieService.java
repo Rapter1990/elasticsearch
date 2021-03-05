@@ -4,15 +4,19 @@ import com.springboot.elasticsearch.model.Director;
 import com.springboot.elasticsearch.model.Movie;
 import com.springboot.elasticsearch.repository.MovieRepository;
 import com.springboot.elasticsearch.util.Constants;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +29,7 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public Optional<Movie> findById(Long id) {
+    public Optional<Movie> findById(String id) {
         return movieRepository.findById(id);
     }
 
@@ -37,15 +41,24 @@ public class MovieService {
         return movieRepository.findByRatingBetween(start, end);
     }
 
-    public List<Movie> findByDirector(Director director) {
-        return movieRepository.findByDirector(director);
+    public Page<Movie> findByDirector(String search) {
+
+        QueryBuilder queryBuilder = QueryBuilders.nestedQuery(
+                "director",
+                QueryBuilders.boolQuery().must(QueryBuilders.matchQuery(Constants.MOVIE_DIRECTOR, search)),
+                ScoreMode.None);
+
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(queryBuilder)
+                .build();
+        return movieRepository.search(searchQuery);
     }
 
     public Movie saveMovie(Movie movie) {
         return movieRepository.save(movie);
     }
 
-    public void deleteMovie(Long id) {
+    public void deleteMovie(String id) {
         Optional<Movie> movie = movieRepository.findById(id);
         if(movie.isPresent()) {
             Movie deletedMovie = movie.get();
@@ -53,17 +66,20 @@ public class MovieService {
         }
     }
 
-    public Page<Movie> allMovies(Pageable pageable) {
-        return movieRepository.findAll(pageable);
+    public List<Movie> allMovies() {
+        List<Movie> employees = new ArrayList<>();
+        movieRepository.findAll().forEach(employees::add);
+        return employees;
     }
 
-    public void update(Long id,Movie movieForUpdate) {
+    public void update(String id,Movie movieForUpdate) {
 
         movieRepository.findById(id).ifPresentOrElse(movie -> {
             movie.setName(movieForUpdate.getName());
             movie.setRating(movieForUpdate.getRating());
             movie.setGenre(movieForUpdate.getGenre());
             movie.setDirector(movieForUpdate.getDirector());
+            movieRepository.save(movie);
         }, () -> {
             throw new RuntimeException("No Record With this Id!");
                 }
@@ -88,10 +104,12 @@ public class MovieService {
     }
 
     public Page<Movie> searchMovieWithMultiMatch(String search) {
+
+
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(multiMatchQuery(search)
                         .field(Constants.MOVIE_NAME)
-                        .field(Constants.MOVIE_DIRECTOR)
+                        .field(Constants.MOVIE_ID)
                         .type(MultiMatchQueryBuilder.Type.BEST_FIELDS))
                 .build();
         return movieRepository.search(searchQuery);

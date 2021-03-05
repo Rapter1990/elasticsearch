@@ -29,8 +29,8 @@ public class MovieController {
     }
 
     @GetMapping("/find/all")
-    public Page<Movie> allBooks(@PageableDefault(sort = {"id"}, size = 25, page = 0) Pageable pageable) {
-        return movieService.allMovies(pageable);
+    public List<Movie> allBooks() {
+        return movieService.allMovies();
     }
 
     @GetMapping("/{search}")
@@ -54,7 +54,7 @@ public class MovieController {
     }
 
     @GetMapping("/find/{id}")
-    public Optional<Movie> findById(@PathVariable Long id) {
+    public Optional<Movie> findById(@PathVariable String id) {
         LOG.info("Getting find movie By id, ", id);
         return movieService.findById(id);
     }
@@ -71,21 +71,21 @@ public class MovieController {
         return movieService.getByRatingInterval(start,end);
     }
 
-    @GetMapping("/find_director")
-    public List<Movie> findByDirector(@RequestBody Director director) {
-        LOG.info("findByDirector, ", director.toString());
-        return movieService.findByDirector(director);
+    @GetMapping("/finddirector/{name}")
+    public Page<Movie> findByDirector(@PathVariable String name) {
+        LOG.info("findByDirector , ", name);
+        return movieService.findByDirector(name);
     }
 
     @PutMapping("/update/{id}")
-    public Movie updateMovie(@RequestBody Movie movie,@PathVariable Long id) {
+    public Movie updateMovie(@RequestBody Movie movie,@PathVariable String id) {
         LOG.info("Updating Movie with id {}", id);
         movieService.update(id,movie);
         return movie;
     }
 
     @DeleteMapping("delete/{id}")
-    public void deleteEmployeeByID(@PathVariable Long id) {
+    public void deleteEmployeeByID(@PathVariable String id) {
         LOG.info("Deleting Movie with id {}", id);
         movieService.deleteMovie(id);
     }

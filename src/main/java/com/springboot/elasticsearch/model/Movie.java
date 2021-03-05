@@ -18,7 +18,7 @@ import java.util.List;
 public class Movie implements Serializable {
 
     @Id
-    private Long id;
+    private String id;
 
     @Field(name = "name",type = FieldType.Text)
     private String name;

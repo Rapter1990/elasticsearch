@@ -25,6 +25,10 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    public Optional<Movie> findById(Long id) {
+        return movieRepository.findById(id);
+    }
+
     public List<Movie> getByName(String name) {
         return movieRepository.findByName(name);
     }
@@ -37,7 +41,7 @@ public class MovieService {
         return movieRepository.findByDirector(director);
     }
 
-    public Movie addMovie(Movie movie) {
+    public Movie saveMovie(Movie movie) {
         return movieRepository.save(movie);
     }
 

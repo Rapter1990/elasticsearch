@@ -20,7 +20,7 @@
 
 <b>1 )</b> Install <b>Docker Desktop</b>. Here is the installation <b>link</b> : https://docs.docker.com/docker-for-windows/install/
 
-<b>2 )</b> Open <b>Terminal</b> under <b>resources</b> folder to run <b>Elastic Search</b> on <b>Docker</b> Container
+<b>2 )</b> Open <b>Terminal</b> under <b>resources</b> folder to run <b>Elastic Search Server</b> on <b>Docker</b> Container
 ```
     docker-compose up -d
 ```

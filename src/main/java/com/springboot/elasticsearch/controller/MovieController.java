@@ -48,9 +48,9 @@ public class MovieController {
         return movieService.searchMovieWithMultiMatch(search);
     }
 
-    @GetMapping("/full_text_search/{search}")
-    public Page<Movie> searchMovieWithFullText(@PathVariable String search) {
-        return movieService.searchMovieWithFullText(search);
+    @GetMapping("/phrase_search/{search}")
+    public Page<Movie> searchMovieWithPhraseQuery(@PathVariable String search) {
+        return movieService.searchMovieWithPhraseQuery(search);
     }
 
     @GetMapping("/find/{id}")

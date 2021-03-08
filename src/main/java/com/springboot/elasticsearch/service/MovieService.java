@@ -115,7 +115,7 @@ public class MovieService {
         return movieRepository.search(searchQuery);
     }
 
-    public Page<Movie> searchMovieWithFullText(String search) {
+    public Page<Movie> searchMovieWithPhraseQuery(String search) {
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(matchPhraseQuery(Constants.MOVIE_NAME, search).slop(1))
                 .build();

@@ -5,13 +5,11 @@
 ### 📖 Information
 
 <ul style="list-style-type:disc">
-  <li></li>
-  <li></li>
+  <li>We can search full-text in a huge data stack via <b>Elastic Search</b>.</li>
+  <li>By searching through indexes, it produces the result quickly </li>
   <li>Here is the explanation of the project
       <ul>
-        <li></li>
-        <li></li>
-        <li></li>
+        <li>After implementing Elastic Search configuraiton, the projects provides you to implement both CRUD process and custom search criteria operations</li>
       </ul>
   </li>
 </ul>

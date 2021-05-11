@@ -9,7 +9,7 @@
   <li>By searching through indexes, it produces the result quickly </li>
   <li>Here is the explanation of the project
       <ul>
-        <li>After implementing Elastic Search configuraiton, the projects provides you to implement both CRUD process and custom search criteria operations</li>
+        <li>After implementing Elastic Search configuration, the projects provides you to implement both CRUD process and custom search criteria operations</li>
       </ul>
   </li>
 </ul>
